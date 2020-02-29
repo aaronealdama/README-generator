@@ -9,157 +9,182 @@ const inquirer = require("inquirer");
 const util = require("util");
 const axios = require("axios");
 
-
-// global variables
-
-const writeFileAsync = util.promisify(fs.writeFile);
-
 // functions
-const username = () => {
-    return inquirer.prompt({
-    type: "input",
-    message: "Enter your Github username:",
-    name: "username"
-});
-}
+class ReadMe {
 
-const apiInfo = (response) => {
-    const queryURL = `https://api.github.com/users/${response.username}`
+// object constructure that constructs the ReadMe object
 
-    return new Promise ((resolve,reject) => {
-        axios.get(queryURL).then((response) => {   
-            user = {
-                email: response.data.email,
-                photo: response.data.avatar_url
+constructor() {
+
+this.writeFileAsync = util.promisify(fs.writeFile);
+
+this.username = function()  {
+        return inquirer.prompt({
+        type: "input",
+        message: "Enter your Github username:",
+        name: "username"
+    });
+    }
+
+// function that asks the user for their github username
+    
+this.apiInfo = function(response)  {
+        const queryURL = `https://api.github.com/users/${response.username}`
+    
+        return new Promise ((resolve,reject) => {
+            axios.get(queryURL).then((response) => {   
+                user = {
+                    email: response.data.email,
+                    photo: response.data.avatar_url
+                }
+                resolve(user)
+            })
+        })        
+    }
+
+// function method that returns a promise which resolves the user object generated from the response info
+    
+this.prompt = function()  {
+        return inquirer.prompt([
+            {
+                type: "input",
+                name: "title",
+                message: "What is your title?"
+            },
+            {
+                type: "input",
+                name: "description",
+                message: "Type your description"
+            },
+            {
+                type: "input",
+                name: "table",
+                message: "Write table of contents"
+            },
+            {
+                type: "input",
+                name: "installation",
+                message: "Type your installation process"
+            },
+            {
+                type: "input",
+                name: "usage",
+                message: "Type the usage for the project"
+            },
+            {
+                type: "input",
+                name: "liscense",
+                message: "Type any liscenses"
+            },
+            {
+                type: "input",
+                name: "contributing",
+                message: "Write the contributers to the project"
+            },
+            {
+                type: "input",
+                name: "tests",
+                message: "Type out any tests you did with your code"
+            },
+            {
+                type: "input",
+                name: "color",
+                message: "Type what color you want your badge to be"
+            },
+            {
+                type: "input",
+                name: "label",
+                message: "Label your badge (this badge is going on the 'tests' section of the README)"
+            },
+            {
+                type: "input",
+                name: "message",
+                message: "Type your status on your badge (this badge is going on the 'tests' section of the README)"
             }
-            resolve(user)
-        })
-    })
-        
-     
-}
+        ])
+    }
 
-const prompt = () => {
-    return inquirer.prompt([
-        {
-            type: "input",
-            name: "title",
-            message: "What is your title?"
-        },
-        {
-            type: "input",
-            name: "description",
-            message: "Type your description"
-        },
-        {
-            type: "input",
-            name: "table",
-            message: "Write table of contents"
-        },
-        {
-            type: "input",
-            name: "installation",
-            message: "Type your installation process"
-        },
-        {
-            type: "input",
-            name: "usage",
-            message: "Type the usage for the project"
-        },
-        {
-            type: "input",
-            name: "liscense",
-            message: "Type any liscenses"
-        },
-        {
-            type: "input",
-            name: "contributing",
-            message: "Write the contributers to the project"
-        },
-        {
-            type: "input",
-            name: "tests",
-            message: "Type out any tests you did with your code"
-        },
-        {
-            type: "input",
-            name: "color",
-            message: "Type what color you want your badge to be"
-        },
-        {
-            type: "input",
-            name: "label",
-            message: "Label your badge (this badge is going on the 'tests' section of the README)"
-        },
-        {
-            type: "input",
-            name: "message",
-            message: "Type your status on your badge (this badge is going on the 'tests' section of the README)"
-        }
-    ])
-}
 
-const markdown = (answers) => {
-    return `# ${answers[0].title}
-
- ## Description
-
- ${answers[0].description}
-
+// function method which prompts user multiple questions which is stored in an object
+    
+this.markdown = function(answers)  {
+        return `# ${answers[0].title}
+    
+## Description
+    
+${answers[0].description}
+    
 ## Table of Contents
-
+    
 ${answers[0].table}
-
+    
 ## Installation
-
+    
 ${answers[0].installation}
-
+    
 ## Usage
-
+    
 ${answers[0].usage}
-
+    
 ## Licenses
-
+    
 ${answers[0].liscense}
-
+    
 ## Contributing
-
+    
 ${answers[0].contributing}
-
+    
 ## Tests
 [![Generic badge](https://img.shields.io/badge/${answers[0].label}-${answers[0].message}-${answers[0].color}.svg)](https://shields.io/)
-
+    
 ${answers[0].tests}
-
+    
 ## Questions
 ![](${answers[1].photo}?raw=true)
-
+    
 ${answers[1].email}`
 }
 
-async function initiation() {
+// function method which formats the data from the inputed object into a ReadMe format
+    
+this.initiation = async function() {
+// function method which holds an async function in order for code to execute sequentially 
     console.log("hi");
-    let emptyArr = [];
-    try {
-        const userInput = await username();
-        const answer = await prompt();
-        await emptyArr.push(answer);
-         apiInfo(userInput).then(data => {
-           emptyArr.push(data);
-           console.log(emptyArr)
-           const markdownFile = markdown(emptyArr);
-           writeFileAsync("README.md", markdownFile)
-           console.log("Successfully created README file!")
-        }).catch((err) => {
+    let emptyArr = []; 
+    // empty array to hold multiple objects
+        try {
+            const userInput = await this.username();
+            // const userInput stores the username object
+            const answer = await this.prompt();
+            // const answer stores the prompt object
+             emptyArr.push(answer);
+             this.apiInfo(userInput).then(data => {
+               // apiInfo is invoked which takes the userInput object and uses a .then with the promise
+               emptyArr.push(data);
+               // data which is the resolved user object from the apiInfo function is pushed into the emptyArr 
+               console.log(emptyArr)
+               const markdownFile = this.markdown(emptyArr);
+               // const markdownFile stores the string generated from the markdown function method which takes the emptyArr
+               // and formats the answers
+               this.writeFileAsync("README.md", markdownFile)
+               // invokes the writeFileAsync function which is promisified and generates the readme file with the markdownFile
+               // string
+               console.log("Successfully created README file!")
+            }).catch((err) => {
+                console.log(err);
+            });       
+        } catch(err) {
             console.log(err);
-        });       
-    } catch(err) {
-        console.log(err);
-    }
+        }
+    } 
+ }
 }
 
-initiation();
 
-module.exports = readme;
+// ReadMe object is created and the initiation method is executed
+
+module.exports = ReadMe;
+// ReadMe object is exported
+
 
 
