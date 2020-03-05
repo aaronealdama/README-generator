@@ -2,7 +2,6 @@
 // Sections: Title, description, table of contents, installation, usage
 // license, contributing, tests, questions
 
-
 // packages
 const fs = require("fs");
 const inquirer = require("inquirer");
@@ -11,15 +10,13 @@ const axios = require("axios");
 
 // class constructor
 class ReadMe {
+  // object constructor that constructs the ReadMe object
 
-// object constructure that constructs the ReadMe object
+  constructor() {
+    this.writeFileAsync = util.promisify(fs.writeFile);
 
-constructor() {
-
-this.writeFileAsync = util.promisify(fs.writeFile);
-
-this.username = function()  {
-        return inquirer.prompt({
+    this.username = function() {
+      return inquirer.prompt({
         type: "input",
         message: "Enter your Github username:",
         name: "username"
@@ -104,11 +101,10 @@ this.prompt = function()  {
         ])
     }
 
+    // function method which prompts user multiple questions which is stored in an object
 
-// function method which prompts user multiple questions which is stored in an object
-    
-this.markdown = function(answers)  {
-        return `# ${answers[0].title}
+    this.markdown = function(answers) {
+      return `# ${answers[0].title}
     
 ## Description
     
@@ -128,7 +124,7 @@ ${answers[0].usage}
     
 ## Licenses
     
-${answers[0].liscense}
+${answers[0].license}
     
 ## Contributing
     
@@ -142,46 +138,45 @@ ${answers[0].tests}
 ## Questions
 ![](${answers[1].photo}?raw=true)
     
-${answers[1].email}`
-}
+${answers[1].email}`;
+    };
 
-// function method which formats the data from the inputed object into a ReadMe format
-    
-this.initiation = async function() {
-// function method which holds an async function in order for code to execute sequentially 
-    console.log("hi");
-    let emptyArr = []; 
-    // empty array to hold multiple objects
-        try {
-            const userInput = await this.username();
-            // const userInput stores the username object
-            const answer = await this.prompt();
-            // const answer stores the prompt object
-             emptyArr.push(answer);
-             this.apiInfo(userInput).then(data => {
-               // apiInfo is invoked which takes the userInput object and uses a .then with the promise
-               emptyArr.push(data);
-               // data which is the resolved user object from the apiInfo function is pushed into the emptyArr 
-               console.log(emptyArr)
-               const markdownFile = this.markdown(emptyArr);
-               // const markdownFile stores the string generated from the markdown function method which takes the emptyArr
-               // and formats the answers
-               this.writeFileAsync("README.md", markdownFile)
-               // invokes the writeFileAsync function which is promisified and generates the readme file with the markdownFile
-               // string
-               console.log("Successfully created README file!")
-            }).catch((err) => {
-                console.log(err);
-            });       
-        } catch(err) {
+    // function method which formats the data from the inputed object into a ReadMe format
+
+    this.initiation = async function() {
+      // function method which holds an async function in order for code to execute sequentially
+      console.log("hi");
+      let emptyArr = [];
+      // empty array to hold multiple objects
+      try {
+        const userInput = await this.username();
+        // const userInput stores the username object
+        const answer = await this.prompt();
+        // const answer stores the prompt object
+        emptyArr.push(answer);
+        this.apiInfo(userInput)
+          .then(data => {
+            // apiInfo is invoked which takes the userInput object and uses a .then with the promise
+            emptyArr.push(data);
+            // data which is the resolved user object from the apiInfo function is pushed into the emptyArr
+            console.log(emptyArr);
+            const markdownFile = this.markdown(emptyArr);
+            // const markdownFile stores the string generated from the markdown function method which takes the emptyArr
+            // and formats the answers
+            this.writeFileAsync("README.md", markdownFile);
+            // invokes the writeFileAsync function which is promised and generates the readme file with the markdownFile
+            // string
+            console.log("Successfully created README file!");
+          })
+          .catch(err => {
             console.log(err);
-        }
-    } 
- }
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+  }
 }
 
 module.exports = ReadMe;
 // ReadMe object is exported
-
-
-
