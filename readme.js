@@ -9,7 +9,7 @@ const inquirer = require("inquirer");
 const util = require("util");
 const axios = require("axios");
 
-// functions
+// class constructor
 class ReadMe {
 
 // object constructure that constructs the ReadMe object
@@ -52,22 +52,22 @@ this.prompt = function()  {
                 message: "What is your title?"
             },
             {
-                type: "input",
+                type: "editor",
                 name: "description",
                 message: "Type your description"
             },
             {
-                type: "input",
+                type: "editor",
                 name: "table",
                 message: "Write table of contents"
             },
             {
-                type: "input",
+                type: "editor",
                 name: "installation",
                 message: "Type your installation process"
             },
             {
-                type: "input",
+                type: "editor",
                 name: "usage",
                 message: "Type the usage for the project"
             },
@@ -77,12 +77,12 @@ this.prompt = function()  {
                 message: "Type any liscenses"
             },
             {
-                type: "input",
+                type: "editor",
                 name: "contributing",
                 message: "Write the contributers to the project"
             },
             {
-                type: "input",
+                type: "editor",
                 name: "tests",
                 message: "Type out any tests you did with your code"
             },
@@ -179,9 +179,6 @@ this.initiation = async function() {
     } 
  }
 }
-
-
-// ReadMe object is created and the initiation method is executed
 
 module.exports = ReadMe;
 // ReadMe object is exported
