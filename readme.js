@@ -20,86 +20,88 @@ class ReadMe {
         type: "input",
         message: "Enter your Github username:",
         name: "username"
-    });
-    }
+      });
+    };
 
-// function that asks the user for their github username
-    
-this.apiInfo = function(response)  {
-        const queryURL = `https://api.github.com/users/${response.username}`
-    
-        return new Promise ((resolve,reject) => {
-            axios.get(queryURL).then((response) => {   
-                user = {
-                    email: response.data.email,
-                    photo: response.data.avatar_url
-                }
-                resolve(user)
-            })
-        })        
-    }
+    // function that asks the user for their github username
 
-// function method that returns a promise which resolves the user object generated from the response info
-    
-this.prompt = function()  {
-        return inquirer.prompt([
-            {
-                type: "input",
-                name: "title",
-                message: "What is your title?"
-            },
-            {
-                type: "editor",
-                name: "description",
-                message: "Type your description"
-            },
-            {
-                type: "editor",
-                name: "table",
-                message: "Write table of contents"
-            },
-            {
-                type: "editor",
-                name: "installation",
-                message: "Type your installation process"
-            },
-            {
-                type: "editor",
-                name: "usage",
-                message: "Type the usage for the project"
-            },
-            {
-                type: "input",
-                name: "liscense",
-                message: "Type any liscenses"
-            },
-            {
-                type: "editor",
-                name: "contributing",
-                message: "Write the contributers to the project"
-            },
-            {
-                type: "editor",
-                name: "tests",
-                message: "Type out any tests you did with your code"
-            },
-            {
-                type: "input",
-                name: "color",
-                message: "Type what color you want your badge to be"
-            },
-            {
-                type: "input",
-                name: "label",
-                message: "Label your badge (this badge is going on the 'tests' section of the README)"
-            },
-            {
-                type: "input",
-                name: "message",
-                message: "Type your status on your badge (this badge is going on the 'tests' section of the README)"
-            }
-        ])
-    }
+    this.apiInfo = function(response) {
+      const queryURL = `https://api.github.com/users/${response.username}`;
+
+      return new Promise((resolve, reject) => {
+        axios.get(queryURL).then(response => {
+          const user = {
+            email: response.data.email,
+            photo: response.data.avatar_url
+          };
+          resolve(user);
+        });
+      });
+    };
+
+    // function method that returns a promise which resolves the user object generated from the response info
+
+    this.prompt = function() {
+      return inquirer.prompt([
+        {
+          type: "input",
+          name: "title",
+          message: "What is your title?"
+        },
+        {
+          type: "editor",
+          name: "description",
+          message: "Type your description"
+        },
+        {
+          type: "editor",
+          name: "table",
+          message: "Write table of contents"
+        },
+        {
+          type: "editor",
+          name: "installation",
+          message: "Type your installation process"
+        },
+        {
+          type: "editor",
+          name: "usage",
+          message: "Type the usage for the project"
+        },
+        {
+          type: "input",
+          name: "license",
+          message: "Type any licenses"
+        },
+        {
+          type: "editor",
+          name: "contributing",
+          message: "Write the contributors to the project"
+        },
+        {
+          type: "editor",
+          name: "tests",
+          message: "Type out any tests you did with your code"
+        },
+        {
+          type: "input",
+          name: "color",
+          message: "Type what color you want your badge to be"
+        },
+        {
+          type: "input",
+          name: "label",
+          message:
+            "Label your badge (this badge is going on the 'tests' section of the README)"
+        },
+        {
+          type: "input",
+          name: "message",
+          message:
+            "Type your status on your badge (this badge is going on the 'tests' section of the README)"
+        }
+      ]);
+    };
 
     // function method which prompts user multiple questions which is stored in an object
 

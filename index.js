@@ -1,4 +1,4 @@
-const ReadMe = require("./readme.js")
+const ReadMe = require("./readme.js");
 
 const newReadMe = new ReadMe();
 
